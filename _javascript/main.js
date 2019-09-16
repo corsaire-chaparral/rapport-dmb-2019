@@ -10,40 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   
   var color = Chart.helpers.color;
-  var barChartData = {
-    labels: ['1', '2', '3', '4', '5', 'S/O'],
-    datasets: [{
-      label: 'Question 1',
-      backgroundColor: [
-        color('#d83a29').alpha(0.85).rgbString(),
-        color('#ed7438').alpha(0.85).rgbString(),
-        color('#cbe043').alpha(0.85).rgbString(),
-        color('#8bd14f').alpha(0.85).rgbString(),
-        color('#45962a').alpha(0.85).rgbString()
-      ],
-      borderColor: '#ff6900',
-      borderWidth: 1,
-      data: [
-        occurrences(data.question1, 1),
-        occurrences(data.question1, 2),
-        occurrences(data.question1, 3),
-        occurrences(data.question1, 5),
-        occurrences(data.question1, 1),
-        occurrences(data.question1, 'S/O')
-      ]
-    },
-//               {
-//      label: 'Dataset 2',
-//      backgroundColor: color('#0000ff').alpha(0.5).rgbString(),
-//      borderColor: '#0000ff',
-//      borderWidth: 1,
-//      data: [
-//        '5', '4', '4',
-//        '1', '2', '2', '2'
-//      ]
-//    }
-              ]
-  };
   
   var sections = document.querySelectorAll('.canvas-question');
 
@@ -57,14 +23,20 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/\s/g, '')
       .split(',');
     
-    console.log('rawdata', rawdata)
     let customLabels = section.querySelector('script').getAttribute('data-labels');
 
     let labels = customLabels ? customLabels.split(',') : ['1', '2', '3', '4', '5', 'S/O']
+    
+    console.log('rawdata occurrences', returnData(rawdata, labels)[1])
+    let labelsWithNumbers = [];
+    
+    labels.forEach(function (label, i) {
+      labelsWithNumbers.push(label + ' (' + Math.floor((returnData(rawdata, labels)[i]) / rawdata.length * 100) + '%)')
+    });
 
     charts[section.getAttribute('id')] = new Chart(ctx, {
       data: {
-        labels:  labels,
+        labels:  labelsWithNumbers,
         datasets: [{
           backgroundColor: [
             color('#d83a29').alpha(0.85).rgbString(),
@@ -88,6 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       type: 'doughnut',
       options: {
+        tooltips: {
+          mode: 'index'
+        },
         title: {
           display: false
         },
