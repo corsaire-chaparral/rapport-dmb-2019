@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let labelsWithNumbers = [];
     
     labels.forEach(function (label, i) {
-      labelsWithNumbers.push(label + ' (' + Math.floor((returnData(rawdata, labels)[i]) / rawdata.length * 100) + '%)')
+      labelsWithNumbers.push(label + ' (' + Math.round((returnData(rawdata, labels)[i]) / rawdata.length * 100) + '%)')
     });
 
     charts[section.getAttribute('id')] = new Chart(ctx, {
